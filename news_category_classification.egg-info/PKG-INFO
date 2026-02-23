@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: news_category_classification
+Version: 0.1.0
+Summary: Dự án phân loại thể loại tin tức sử dụng các kỹ thuật NLP và machine learning.
+Author: Anh Hao
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: pyvi
+Requires-Dist: beautifulsoup4
+Requires-Dist: requests
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary

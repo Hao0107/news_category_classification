@@ -1,0 +1,8 @@
+setup.py
+news_category_classification.egg-info/PKG-INFO
+news_category_classification.egg-info/SOURCES.txt
+news_category_classification.egg-info/dependency_links.txt
+news_category_classification.egg-info/requires.txt
+news_category_classification.egg-info/top_level.txt
+src/__init__.py
+src/crawl_news.py
