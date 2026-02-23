@@ -1,0 +1,136 @@
+# File yaml dung de cau hinh cach crawl du lieu tu cac trang tin tuc khac nhau.
+# Moi trang se co selector rieng de tim link bai viet, tieu de va tom tat. 
+# Cung nhu template de tao url cho cac trang tiep theo khi crawl du lieu.
+
+# cau hinh cho tung trang tin tuc
+sites:
+  vnexpress.net:
+    article_link_selector: "h3.title-news a"
+    pagination_template: "{base_url}-p{page}"
+    title_selector: "h1.title-detail"
+    abstract_selector: "p.description"
+
+  # thanhnien.vn:
+  #   article_link_selector: "h2.detail-title a"
+  #   pagination_template: "{base_url}?p={page}"
+  #   title_selector: "h1.detail-title"
+  #   abstract_selector: "h2.detail-sapo"
+
+  dantri.com.vn:
+    article_link_selector: "h3.article-title a"
+    pagination_template: "{base_url}/trang-{page}.htm"
+    title_selector: "h1.title-page"
+    abstract_selector: "h2.singular-sapo"
+
+  tuoitre.vn:
+    article_link_selector: ".box-category-item .box-title-text"
+    pagination_template: "{base_url}/trang-{page}.htm"
+    title_selector: "h1.detail-title"
+    abstract_selector: "h2.detail-sapo"
+
+  vietnamnet.vn:
+    article_link_selector: ".vnn-title a"
+    pagination_template: "{base_url}-page{page}"
+    title_selector: "h1.content-detail-title"
+    abstract_selector: "div.content-detail-sapo"
+
+  laodong.vn:
+    article_link_selector: "h4.art-title a"
+    pagination_template: "{base_url}?page={page}"
+    title_selector: "h1.title"
+    abstract_selector: "p.abs"
+
+# cau hinh cac the loai va cac trang tuong ung de crawl du lieu
+categories:
+  'Thời sự':
+    - 'https://vnexpress.net/thoi-su'
+    # - 'https://thanhnien.vn/thoi-su'
+    - 'https://dantri.com.vn/xa-hoi'
+    - 'https://tuoitre.vn/thoi-su'
+    - 'https://vietnamnet.vn/thoi-su'
+
+  'Kinh doanh':
+    - 'https://vnexpress.net/kinh-doanh'
+    # - 'https://thanhnien.vn/kinh-te'
+    - 'https://dantri.com.vn/kinh-doanh'
+    - 'https://tuoitre.vn/kinh-doanh'
+    - 'https://laodong.vn/kinh-doanh'
+
+  'Thể thao':
+    - 'https://vnexpress.net/the-thao'
+    # - 'https://thanhnien.vn/the-thao'
+    - 'https://dantri.com.vn/the-thao'
+    - 'https://tuoitre.vn/the-thao'
+    - 'https://vietnamnet.vn/the-thao'
+
+  'Công nghệ':
+    - 'https://vnexpress.net/so-hoa'
+    # - 'https://thanhnien.vn/cong-nghe'
+    - 'https://dantri.com.vn/suc-manh-so'
+    - 'https://tuoitre.vn/cong-nghe'
+    - 'https://vietnamnet.vn/cong-nghe'
+
+  'Giải trí':
+    - 'https://vnexpress.net/giai-tri'
+    # - 'https://thanhnien.vn/giai-tri'
+    - 'https://dantri.com.vn/giai-tri'
+    - 'https://tuoitre.vn/giai-tri'
+    - 'https://vietnamnet.vn/giai-tri'
+
+  'Sức khỏe':
+    - 'https://vnexpress.net/suc-khoe'
+    # - 'https://thanhnien.vn/suc-khoe'
+    - 'https://dantri.com.vn/suc-khoe'
+    - 'https://tuoitre.vn/suc-khoe'
+    - 'https://laodong.vn/suc-khoe'
+
+  'Giáo dục':
+    - 'https://vnexpress.net/giao-duc'
+    # - 'https://thanhnien.vn/giao-duc'
+    - 'https://dantri.com.vn/giao-duc'
+    - 'https://tuoitre.vn/giao-duc'
+    - 'https://vietnamnet.vn/giao-duc'
+
+  'Pháp luật':
+    - 'https://vnexpress.net/phap-luat'
+    # - 'https://thanhnien.vn/thoi-su/phap-luat'
+    - 'https://dantri.com.vn/phap-luat'
+    - 'https://tuoitre.vn/phap-luat'
+    - 'https://laodong.vn/phap-luat'
+
+  'Khoa học':
+    - 'https://vnexpress.net/khoa-hoc'
+    - 'https://dantri.com.vn/khoa-hoc-cong-nghe'
+    - 'https://tuoitre.vn/khoa-hoc'
+
+  'Xe':
+    - 'https://vnexpress.net/oto-xe-may'
+    # - 'https://thanhnien.vn/xe'
+    - 'https://dantri.com.vn/o-to-xe-may'
+    - 'https://tuoitre.vn/xe'
+
+  'Du lịch':
+    - 'https://vnexpress.net/du-lich'
+    # - 'https://thanhnien.vn/du-lich'
+    - 'https://dantri.com.vn/du-lich'
+    - 'https://tuoitre.vn/du-lich'
+    - 'https://vietnamnet.vn/du-lich'
+
+  'Bất động sản':
+    - 'https://vnexpress.net/bat-dong-san'
+    - 'https://dantri.com.vn/bat-dong-san'
+    - 'https://vietnamnet.vn/bat-dong-san'
+    - 'https://laodong.vn/bat-dong-san'
+
+  'Đời sống':
+    - 'https://vnexpress.net/doi-song'
+    # - 'https://thanhnien.vn/doi-song'
+    - 'https://dantri.com.vn/doi-song'
+    - 'https://vietnamnet.vn/doi-song'
+
+  'Thế giới':
+    - 'https://vnexpress.net/the-gioi'
+    # - 'https://thanhnien.vn/the-gioi'
+    - 'https://dantri.com.vn/the-gioi'
+    - 'https://tuoitre.vn/the-gioi'
+    - 'https://vietnamnet.vn/the-gioi'
