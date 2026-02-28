@@ -1,3 +1,4 @@
+import cloudscraper
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -11,7 +12,7 @@ from urllib.parse import urlparse
 
 # --- CONFIGURATION ---
 class ConfigManager:
-    def __init__(self, config_path="./sites_config.yaml"):
+    def __init__(self, config_path="../sites_config.yaml"):
         '''
             Khoi tao ConfigManager, doc file cau hinh va luu vao self.sites va self.categories
         
@@ -69,10 +70,26 @@ class ArticleParser:
         '''
             Khoi tao ArticleParser, dat header de su dung khi gui request den cac trang tin tuc.
         '''
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7'
-        }
+        self.scraper = cloudscraper.create_scraper(
+            browser={
+                'browser': 'chrome',
+                'platform': 'windows',
+                'mobile': False
+            }
+        )
+        self.user_agents = [
+            # Chrome Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            # Chrome Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            # Firefox Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0',
+            # Safari Mac
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+            # Edge Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0'
+        ]
 
     def get_domain(self, url):
         return urlparse(url).netloc.replace('www.', '')
@@ -85,12 +102,47 @@ class ArticleParser:
         :param url: URL cua trang tin tuc can phan tich
         '''
         time.sleep(random.uniform(0.5, 1.5))
+        
+        dynamic_headers = {
+            # chon ngau nhien 1 trinh duyet trong list user_agents de gia lap request tu nguoi dung thuc su, giam nguy co bi chan
+            'User-Agent': random.choice(self.user_agents),
+            
+            # cho server biet ta muon nhan dinh dang HTML
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+            
+            # Khai báo bộ giải nén chuẩn giúp tải trang nhanh hơn
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            
+            # Các header bảo mật mặc định của trình duyệt hiện đại
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'DNT': '1' # Do Not Track request
+        }
+        
         try:
-            response = requests.get(url, headers=self.headers, timeout=15)
+            response = self.scraper.get(url, headers=dynamic_headers, timeout=20)
+            
             if response.status_code == 200:
+                if "Just a moment..." in response.text or "Cloudflare" in response.text:
+                    print(f"   [Bị chặn] Vẫn dính tường lửa tại: {url}")
+                    return None
                 return BeautifulSoup(response.content, 'html.parser')
+            elif response.status_code == 403:
+                print(f"   [Lỗi 403 Forbidden] tại: {url}")
+            elif response.status_code == 429:
+                print(f"   [Lỗi 429 Too Many Requests] tại {url}. Sleep 10s...")
+                time.sleep(10)
+            else:
+                print(f"   [Lỗi {response.status_code}] Tại {url}")
+        except requests.exceptions.Timeout:
+            print(f"   [Lỗi Timeout] Không thể kết nối tới {url} sau 15 giây.")
         except Exception as e:
-            pass
+            print(f"   [Lỗi Mạng] {url} - {e}")
         return None
 
     def extract_data(self, url, category, site_rules):
@@ -103,21 +155,48 @@ class ArticleParser:
         :param site_rules: Mot dict chua cac selector de tim tieu de va tom tat tren trang tin tuc tuong ung
         '''
         soup = self.get_soup(url)
-        if not soup: return None
+        if not soup: 
+            print(f"   [Lỗi mạng/Bị chặn] Không thể tải: {url}")
+            return None
 
-        title_tag = soup.select_one(site_rules['title_selector'])
-        abs_tag = soup.select_one(site_rules['abstract_selector'])
+        try:
+            title_tag = soup.select_one(site_rules['title_selector'])
+            abs_tag = soup.select_one(site_rules['abstract_selector'])
 
-        if title_tag and abs_tag:
-            return {
-                'category': category,
-                'source': self.get_domain(url),
-                'title': title_tag.get_text(strip=True).replace('\n', ' '),
-                'abstract': abs_tag.get_text(strip=True).replace('\n', ' '),
-                'url': url
-            }
+            if not title_tag:
+                # In ra de biet file YAML cau hinh sai hoac bai bao dang video/anh
+                print(f"   [Thực tế web trả về] {soup.title.text if soup.title else 'Không có HTML'}")
+                print(f"   [Bỏ qua] Không tìm thấy Tiêu đề: {url}")
+                return None
+            
+            # xoa cac the HTML khong can thiet trong the abs_tag de tranh lay nham noi dung khac vao tom tat, 
+            # chi ap dung neu co abs_tag va co quy tac remove_selectors trong cau hinh
+            remove_selectors = site_rules.get('remove_selectors', [])
+            if abs_tag and remove_selectors:
+                for selector in remove_selectors:
+                    for trash in abs_tag.select(selector):
+                        trash.decompose()
+                
+            title = title_tag.get_text(strip=True).replace('\n', ' ')
+            
+            # khong bat buoc phai co tom tat, neu khong co thi de rong
+            abstract = ""
+            if abs_tag:
+                abstract = abs_tag.get_text(strip=True).replace('\n', ' ')
+
+            if title: # Chi can co title la luu luon
+                return {
+                    'category': category,
+                    'source': self.get_domain(url),
+                    'title': title,
+                    'abstract': abstract,
+                    'url': url
+                }
+                
+        except Exception as e:
+            print(f"   [extract error] {url} - Chi tiết: {e}")
+            
         return None
-
 # --- CRAWL ORCHESTRATOR ---
 class CrawlOrchestrator:
     def __init__(self, config_manager, storage_manager, parser):
@@ -176,7 +255,6 @@ class CrawlOrchestrator:
                     else:
                         template = rules.get('pagination_template', "{base_url}")
                         current_url = template.format(base_url=clean_base_url, page=page)
-                    # IN RA MAN HINH: Dang tai trang nao
                     print(f"      - Fetching Page {page}: {current_url}")
 
                     # Lay soup cua trang hien tai de tim link bai viet
@@ -217,7 +295,7 @@ class CrawlOrchestrator:
         print(f"\nFound {len(tasks)} unique articles to download.")
         print(f"=== CONCURRENT DOWNLOADING ({max_workers} threads) ===")
         
-        # su dung ThreadPoolExecutor de thuc hien cac task trich xuat du lieu tu cac bai viet mot cach dong bo va hieu qua
+        # su dung ThreadPoolExecutor de thuc hien cac task trich xuat du lieu tu cac bai viet mot cach dong bo
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [executor.submit(self._worker_task, url, cat, rules) for url, cat, rules in tasks]
             

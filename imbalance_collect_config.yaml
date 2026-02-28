@@ -55,14 +55,6 @@ sites:
 
 # cau hinh cac the loai va cac trang tuong ung de crawl du lieu
 categories:
-  'Thời sự':
-    - 'https://vnexpress.net/thoi-su'
-    - 'https://thanhnien.vn/thoi-su'
-    - 'https://dantri.com.vn/xa-hoi'
-    - 'https://tuoitre.vn/thoi-su'
-    - 'https://vietnamnet.vn/thoi-su'
-    # - 'https://plo.vn/thoi-su'
-
   'Kinh doanh':
     - 'https://vnexpress.net/kinh-doanh'
     - 'https://thanhnien.vn/kinh-te'
@@ -71,24 +63,6 @@ categories:
     - 'https://vietnamnet.vn/kinh-doanh'
     # - 'https://laodong.vn/kinh-doanh'
     # - 'https://plo.vn/kinh-te'
-
-  'Thể thao':
-    - 'https://vnexpress.net/the-thao'
-    - 'https://thanhnien.vn/the-thao'
-    - 'https://dantri.com.vn/the-thao'
-    - 'https://tuoitre.vn/the-thao'
-    - 'https://vietnamnet.vn/the-thao'
-    - 'https://plo.vn/the-thao'
-
-  'Khoa học - Công nghệ':
-    - 'https://vnexpress.net/khoa-hoc'
-    - 'https://vnexpress.net/so-hoa'
-    - 'https://dantri.com.vn/khoa-hoc-cong-nghe'
-    - 'https://dantri.com.vn/suc-manh-so'
-    - 'https://tuoitre.vn/khoa-hoc'
-    - 'https://tuoitre.vn/cong-nghe'
-    - 'https://vietnamnet.vn/cong-nghe'
-    # - 'https://plo.vn/ky-thuat-cong-nghe'
 
   'Giải trí':
     - 'https://vnexpress.net/giai-tri'
@@ -107,14 +81,6 @@ categories:
     # - 'https://laodong.vn/suc-khoe'
     # - 'https://plo.vn/suc-khoe'
 
-  'Giáo dục':
-    - 'https://vnexpress.net/giao-duc'
-    - 'https://thanhnien.vn/giao-duc'
-    - 'https://dantri.com.vn/giao-duc'
-    - 'https://tuoitre.vn/giao-duc'
-    - 'https://vietnamnet.vn/giao-duc'
-    # - 'https://plo.vn/giao-duc'
-
   'Pháp luật':
     - 'https://vnexpress.net/phap-luat'
     - 'https://thanhnien.vn/thoi-su/phap-luat'
@@ -122,6 +88,15 @@ categories:
     - 'https://tuoitre.vn/phap-luat'
     # - 'https://laodong.vn/phap-luat'
     # - 'https://plo.vn/phap-luat'
+
+  'Khoa học - Công nghệ':
+    - 'https://vnexpress.net/khoa-hoc'
+    - 'https://vnexpress.net/so-hoa'
+    - 'https://dantri.com.vn/khoa-hoc-cong-nghe'
+    - 'https://dantri.com.vn/suc-manh-so'
+    - 'https://tuoitre.vn/khoa-hoc'
+    - 'https://tuoitre.vn/cong-nghe'
+    - 'https://vietnamnet.vn/cong-nghe'
 
   'Xe':
     - 'https://vnexpress.net/oto-xe-may'
@@ -138,23 +113,9 @@ categories:
     - 'https://vietnamnet.vn/du-lich'
     # - 'https://plo.vn/du-lich'
 
-  'Bất động sản':
-    - 'https://vnexpress.net/bat-dong-san'
-    - 'https://dantri.com.vn/bat-dong-san'
-    - 'https://vietnamnet.vn/bat-dong-san'
-    # - 'https://laodong.vn/bat-dong-san'
-
   'Đời sống':
     - 'https://vnexpress.net/doi-song'
     - 'https://thanhnien.vn/doi-song'
     - 'https://dantri.com.vn/doi-song'
     - 'https://vietnamnet.vn/doi-song'
     # - 'https://plo.vn/doi-song'
-
-  'Thế giới':
-    - 'https://vnexpress.net/the-gioi'
-    - 'https://thanhnien.vn/the-gioi'
-    - 'https://dantri.com.vn/the-gioi'
-    - 'https://tuoitre.vn/the-gioi'
-    - 'https://vietnamnet.vn/the-gioi'
-    # - 'https://plo.vn/quoc-te'

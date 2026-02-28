@@ -11,6 +11,8 @@ setup(
         "pyvi",      
         "beautifulsoup4",
         "requests",
+        "cloudscraper",
+        "matplotlib",
     ],
     author="Anh Hao",
     description="Dự án phân loại thể loại tin tức sử dụng các kỹ thuật NLP và machine learning.",

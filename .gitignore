@@ -1,2 +1,4 @@
 
-data/
+data/clean/
+data/crawl/
+models/
