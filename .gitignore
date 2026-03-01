@@ -1,4 +1,6 @@
 
-data/clean/
-data/crawl/
+# data/clean/
+# data/crawl/
 models/
+data/clean/crawl/
+data/crawl/clean/
